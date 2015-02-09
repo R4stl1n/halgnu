@@ -15,11 +15,12 @@ public class HalGNUMain {
 
             if(ConfigManager.getInstance().loadConfigurationFile()) {
                 Configuration<PircBotX> config = new Configuration.Builder()
-                        .setName("HalGNU")
-                        .setLogin("HalGNU")
+                        .setName(ConfigManager.getInstance().getIrcNick())
+                        .setLogin(ConfigManager.getInstance().getIrcNick())
+                        .setNickservPassword(ConfigManager.getInstance().getIrcPassword())
                         .setAutoNickChange(true)
-                        .setServer("irc.freenode.net", 6697)
-                        .addAutoJoinChannel("#HalGNUTest")
+                        .setServer(ConfigManager.getInstance().getIrcServer(), ConfigManager.getInstance().getIrcPort())
+                        .addAutoJoinChannel(ConfigManager.getInstance().getIrcChannel())
                         .setSocketFactory(SSLSocketFactory.getDefault())
                         .buildConfiguration();
 

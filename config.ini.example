@@ -1,0 +1,8 @@
+[connection]
+server=irc.freenode.net
+port=6697
+channel=#HalGNUTest
+
+[credentials]
+nick=HalGNU
+password=NONE
