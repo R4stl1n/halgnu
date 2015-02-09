@@ -8,6 +8,8 @@
 *.iml
 *.iws
 
+config.ini
+
 # Mac
 .DS_Store
 
