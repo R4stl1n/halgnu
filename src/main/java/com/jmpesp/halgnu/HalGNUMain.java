@@ -6,7 +6,6 @@ import org.pircbotx.PircBotX;
 
 import javax.net.ssl.SSLSocketFactory;
 
-
 public class HalGNUMain {
 
     public static void main(String[] args) throws Exception {
