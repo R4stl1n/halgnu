@@ -20,7 +20,7 @@ import java.security.cert.X509Certificate;
 
 public class GoogleSearchListener extends ListenerAdapter {
     
-    private String m_command = ".g";
+    private String m_command = ".google";
             
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {

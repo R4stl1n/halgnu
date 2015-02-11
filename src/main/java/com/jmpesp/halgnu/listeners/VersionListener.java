@@ -4,12 +4,9 @@ import com.jmpesp.halgnu.util.CommandHelper;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-/**
- * Created by r4stl1n on 2/10/2015.
- */
 public class VersionListener extends ListenerAdapter {
     
-    private String m_command = ".v";
+    private String m_command = ".version";
 
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {

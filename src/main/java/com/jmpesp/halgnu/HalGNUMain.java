@@ -24,6 +24,7 @@ public class HalGNUMain {
                         .addAutoJoinChannel(ConfigManager.getInstance().getIrcChannel())
                         .setSocketFactory(SSLSocketFactory.getDefault())
                         .addListener(new HelpListener())
+                        .addListener(new TimeListener())
                         .addListener(new VersionListener())
                         .addListener(new HelloWorldListener())
                         .addListener(new GoogleSearchListener())
