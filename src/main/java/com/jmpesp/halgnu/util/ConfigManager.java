@@ -22,6 +22,11 @@ public class ConfigManager {
     private String m_ircNick;
     private String m_ircPassword;
 
+    private String m_twitterConsumerKey;
+    private String m_twitterComsumerSecret;
+    private String m_twitterAccessToken;
+    private String m_twitterAccessSecret;
+
     protected ConfigManager() {
         m_iniConfig = new Ini();
         logger.info("Starting Configuration Manager");
@@ -61,6 +66,12 @@ public class ConfigManager {
             m_ircNick = credentials.get("nick");
             m_ircPassword = credentials.get("password");
 
+            Ini.Section twitter = m_iniConfig.get("twitter");
+            m_twitterConsumerKey = twitter.get("oauth.consumerKey");
+            m_twitterComsumerSecret = twitter.get("oauth.consumerSecret");
+            m_twitterAccessToken = twitter.get("oauth.accessToken");
+            m_twitterAccessSecret = twitter.get("oauth.accessTokenSecret");
+
             logger.info("Loaded configuration file");
             return true;
         } catch (FileNotFoundException ex) {
@@ -94,4 +105,12 @@ public class ConfigManager {
     public String getIrcNick() {
         return m_ircNick;
     }
+
+    public String getTwitterConsumerKey() { return m_twitterConsumerKey; }
+
+    public String getTwitterComsumerSecret() { return m_twitterComsumerSecret; }
+
+    public String getTwitterAccessToken() { return m_twitterAccessToken; }
+
+    public String getTwitterAccessSecret() { return m_twitterAccessSecret; }
 }

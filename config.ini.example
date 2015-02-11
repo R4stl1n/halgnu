@@ -6,3 +6,10 @@ channel=#HalGNUTest
 [credentials]
 nick=HalGNU
 password=NONE
+
+[twitter]
+debug=true
+oauth.consumerKey=somekey
+oauth.consumerSecret=somesecret
+oauth.accessToken=sometoken
+oauth.accessTokenSecret=sometokensecret

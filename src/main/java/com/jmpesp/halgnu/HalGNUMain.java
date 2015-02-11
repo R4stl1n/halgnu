@@ -26,6 +26,7 @@ public class HalGNUMain {
                         .addListener(new HelpListener())
                         .addListener(new TimeListener())
                         .addListener(new VersionListener())
+                        .addListener(new TwitterListener())
                         .addListener(new HelloWorldListener())
                         .addListener(new GoogleSearchListener())
                         .addListener(new WebsiteHeaderListener())

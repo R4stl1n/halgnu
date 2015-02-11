@@ -57,6 +57,12 @@
             <version>1.7.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+
     </dependencies>
 
 </project>

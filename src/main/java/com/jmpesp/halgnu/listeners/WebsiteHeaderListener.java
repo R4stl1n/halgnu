@@ -92,6 +92,9 @@ public class WebsiteHeaderListener extends ListenerAdapter {
 
         if (m_pastUrl.startsWith("www"))
             newUrl = "http://" + m_pastUrl;
+
+        if (m_pastUrl.startsWith("http://"))
+            newUrl = m_pastUrl.replace("https://", "http://");
         
         return newUrl;
     }
