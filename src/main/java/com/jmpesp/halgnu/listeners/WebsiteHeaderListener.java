@@ -70,7 +70,7 @@ public class WebsiteHeaderListener extends ListenerAdapter {
         }}, new SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
     }
-    
+
     private String getTitle() {
         Document doc = null;
         try {

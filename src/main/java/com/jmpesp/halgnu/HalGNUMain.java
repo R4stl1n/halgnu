@@ -1,8 +1,6 @@
 package com.jmpesp.halgnu;
 
-import com.jmpesp.halgnu.listeners.GoogleSearchListener;
-import com.jmpesp.halgnu.listeners.HelloWorldListener;
-import com.jmpesp.halgnu.listeners.WebsiteHeaderListener;
+import com.jmpesp.halgnu.listeners.*;
 import com.jmpesp.halgnu.util.ConfigManager;
 import com.jmpesp.halgnu.util.DatabaseManager;
 import org.pircbotx.Configuration;
@@ -25,6 +23,8 @@ public class HalGNUMain {
                         .setServer(ConfigManager.getInstance().getIrcServer(), ConfigManager.getInstance().getIrcPort())
                         .addAutoJoinChannel(ConfigManager.getInstance().getIrcChannel())
                         .setSocketFactory(SSLSocketFactory.getDefault())
+                        .addListener(new HelpListener())
+                        .addListener(new VersionListener())
                         .addListener(new HelloWorldListener())
                         .addListener(new GoogleSearchListener())
                         .addListener(new WebsiteHeaderListener())
