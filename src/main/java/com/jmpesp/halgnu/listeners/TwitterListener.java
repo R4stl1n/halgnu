@@ -1,6 +1,7 @@
 package com.jmpesp.halgnu.listeners;
 
 import com.jmpesp.halgnu.managers.IRCConnectionManager;
+import com.jmpesp.halgnu.tasks.TwitterTask;
 import com.jmpesp.halgnu.util.CommandHelper;
 import com.jmpesp.halgnu.managers.ConfigManager;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -37,48 +38,7 @@ public class TwitterListener extends ListenerAdapter {
         m_twitterFactory = new TwitterFactory(m_configBuilder.build());
         m_twitter = m_twitterFactory.getInstance();
 
-        m_timer.scheduleAtFixedRate(new TimerTask() {
-
-            private String pastTweet = "";
-
-            @Override
-            public void run() {
-                ConfigurationBuilder m_configBuilder;
-                TwitterFactory m_twitterFactory;
-                Twitter m_twitter;
-
-                m_configBuilder = new ConfigurationBuilder();
-                m_configBuilder.setDebugEnabled(true)
-                        .setOAuthConsumerKey(ConfigManager.getInstance().getTwitterConsumerKey())
-                        .setOAuthConsumerSecret(ConfigManager.getInstance().getTwitterComsumerSecret())
-                        .setOAuthAccessToken(ConfigManager.getInstance().getTwitterAccessToken())
-                        .setOAuthAccessTokenSecret(ConfigManager.getInstance().getTwitterAccessSecret());
-                m_twitterFactory = new TwitterFactory(m_configBuilder.build());
-                m_twitter = m_twitterFactory.getInstance();
-
-                try {
-                    User user = m_twitter.verifyCredentials();
-                    List<Status> statuses = m_twitter.getHomeTimeline();
-
-                    if(!(statuses.get(0).getText().equals(pastTweet))) {
-
-                        if (statuses.get(0).getText().contains(user.getScreenName())) {
-
-                            String completeMessage = "@" + statuses.get(0).getUser().getScreenName() + ": "
-                                    + statuses.get(0).getText();
-                            IRCConnectionManager.getInstance().getBotConnection().sendIRC()
-                                    .message(ConfigManager.getInstance().getIrcChannel(), completeMessage);
-
-                            pastTweet = statuses.get(0).getText();
-                        }
-                    }
-                } catch (TwitterException e) {
-                    e.printStackTrace();
-                }
-
-                // Your database code here
-            }
-        }, 1*60*1000, 1*60*1000);
+        m_timer.scheduleAtFixedRate(new TwitterTask(), 1*60*1000, 1*60*1000);
     }
 
     @Override
