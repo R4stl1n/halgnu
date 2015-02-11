@@ -8,6 +8,7 @@ public class VersionListener extends ListenerAdapter {
     
     private String m_command = ".version";
 
+
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 

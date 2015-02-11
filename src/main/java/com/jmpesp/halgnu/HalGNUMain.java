@@ -1,39 +1,28 @@
 package com.jmpesp.halgnu;
 
-import com.jmpesp.halgnu.listeners.*;
-import com.jmpesp.halgnu.util.ConfigManager;
-import com.jmpesp.halgnu.util.DatabaseManager;
-import org.pircbotx.Configuration;
-import org.pircbotx.PircBotX;
-
-import javax.net.ssl.SSLSocketFactory;
+import com.jmpesp.halgnu.managers.ConfigManager;
+import com.jmpesp.halgnu.managers.DatabaseManager;
+import com.jmpesp.halgnu.managers.IRCConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HalGNUMain {
+
+    private static Logger m_logger = LoggerFactory.getLogger(HalGNUMain.class);
 
     public static void main(String[] args) throws Exception {
 
         if(ConfigManager.getInstance().checkConfigExist()) {
 
             if(ConfigManager.getInstance().loadConfigurationFile()) {
-                Configuration<PircBotX> config = new Configuration.Builder()
-                        .setName(ConfigManager.getInstance().getIrcNick())
-                        .setLogin(ConfigManager.getInstance().getIrcNick())
-                        .setNickservPassword(ConfigManager.getInstance().getIrcPassword())
-                        .setAutoNickChange(true)
-                        .setServer(ConfigManager.getInstance().getIrcServer(), ConfigManager.getInstance().getIrcPort())
-                        .addAutoJoinChannel(ConfigManager.getInstance().getIrcChannel())
-                        .setSocketFactory(SSLSocketFactory.getDefault())
-                        .addListener(new HelpListener())
-                        .addListener(new TimeListener())
-                        .addListener(new VersionListener())
-                        .addListener(new TwitterListener())
-                        .addListener(new HelloWorldListener())
-                        .addListener(new GoogleSearchListener())
-                        .addListener(new WebsiteHeaderListener())
-                        .buildConfiguration();
+                IRCConnectionManager.getInstance();
+                if(IRCConnectionManager.getInstance().startConnection()) {
+                    m_logger.info("Connection established successfully");
+                } else {
+                    m_logger.error("Error occured when connecting");
+                }
 
-                PircBotX myBot = new PircBotX(config);
-                myBot.startBot();
+
             }
         }
 

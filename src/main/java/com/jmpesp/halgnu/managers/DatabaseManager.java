@@ -1,4 +1,4 @@
-package com.jmpesp.halgnu.util;
+package com.jmpesp.halgnu.managers;
 
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;

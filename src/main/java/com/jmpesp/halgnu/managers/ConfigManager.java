@@ -1,4 +1,4 @@
-package com.jmpesp.halgnu.util;
+package com.jmpesp.halgnu.managers;
 
 
 import org.ini4j.Ini;
@@ -23,9 +23,10 @@ public class ConfigManager {
     private String m_ircPassword;
 
     private String m_twitterConsumerKey;
-    private String m_twitterComsumerSecret;
+    private String m_twitterConsumerSecret;
     private String m_twitterAccessToken;
     private String m_twitterAccessSecret;
+
 
     protected ConfigManager() {
         m_iniConfig = new Ini();
@@ -68,7 +69,7 @@ public class ConfigManager {
 
             Ini.Section twitter = m_iniConfig.get("twitter");
             m_twitterConsumerKey = twitter.get("oauth.consumerKey");
-            m_twitterComsumerSecret = twitter.get("oauth.consumerSecret");
+            m_twitterConsumerSecret = twitter.get("oauth.consumerSecret");
             m_twitterAccessToken = twitter.get("oauth.accessToken");
             m_twitterAccessSecret = twitter.get("oauth.accessTokenSecret");
 
@@ -108,7 +109,7 @@ public class ConfigManager {
 
     public String getTwitterConsumerKey() { return m_twitterConsumerKey; }
 
-    public String getTwitterComsumerSecret() { return m_twitterComsumerSecret; }
+    public String getTwitterComsumerSecret() { return m_twitterConsumerSecret; }
 
     public String getTwitterAccessToken() { return m_twitterAccessToken; }
 
