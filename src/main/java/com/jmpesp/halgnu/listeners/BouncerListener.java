@@ -2,6 +2,7 @@ package com.jmpesp.halgnu.listeners;
 
 import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.util.CommandHelper;
+import com.jmpesp.halgnu.util.PermissionHelper;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
@@ -29,34 +30,44 @@ public class BouncerListener extends ListenerAdapter {
 
         // Handle Invite Command
         if (event.getMessage().startsWith(m_command)) {
+            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
 
-            // Handle invite command
-            if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                event.respond("HalGNU V1.0 - Daisy");
+                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                    event.respond("HalGNU V1.0 - Daisy");
+                } else {
+                    event.respond("Ex: " + m_command + " <usernamehere>");
+                }
             } else {
-                event.respond("Ex: " + m_command + " <usernamehere>");
+                event.respond("Permission denied");
             }
         }
 
         // Handle InviteReg Command
         if (event.getMessage().startsWith(m_command2)) {
 
-            // Handle invite command
-            if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                event.respond("HalGNU V1.0 - Daisy");
+            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
+
+                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                    event.respond("HalGNU V1.0 - Daisy");
+                } else {
+                    event.respond("Ex: " + m_command2 + " <usernamehere>");
+                }
             } else {
-                event.respond("Ex: " + m_command2 + " <usernamehere>");
+                event.respond("Permission denied");
             }
         }
 
         // Handle WhoIvited Command
         if (event.getMessage().startsWith(m_command3)) {
+            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
 
-            // Handle invite command
-            if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                event.respond("HalGNU V1.0 - Daisy");
+                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                    event.respond("HalGNU V1.0 - Daisy");
+                } else {
+                    event.respond("Ex: " + m_command3 + " <usernamehere>");
+                }
             } else {
-                event.respond("Ex: " + m_command3 + " <usernamehere>");
+                event.respond("Permission denied");
             }
         }
     }
