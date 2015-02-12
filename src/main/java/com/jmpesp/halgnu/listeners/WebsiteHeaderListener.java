@@ -1,5 +1,6 @@
 package com.jmpesp.halgnu.listeners;
 
+import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.util.CommandHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,6 +15,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +23,14 @@ import java.util.regex.Pattern;
 public class WebsiteHeaderListener extends ListenerAdapter {
 
     private String m_command = ".title";
+    private List<MemberModel.MemberStatus> neededPermissions =
+            new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
+                    MemberModel.MemberStatus.OG,
+                    MemberModel.MemberStatus.ADMIN,
+                    MemberModel.MemberStatus.MEMBER,
+                    MemberModel.MemberStatus.PROSPECT
+            ));
+
     private String m_pastUrl = "";
     private String m_regex = "/((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)/\n";
 

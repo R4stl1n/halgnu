@@ -6,6 +6,7 @@ channel=#HalGNUTest
 [credentials]
 nick=HalGNU
 password=NONE
+owner=NICK
 
 [twitter]
 debug=true

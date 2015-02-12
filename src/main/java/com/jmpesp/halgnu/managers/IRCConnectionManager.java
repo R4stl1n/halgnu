@@ -28,6 +28,7 @@ public class IRCConnectionManager {
                 .setSocketFactory(SSLSocketFactory.getDefault())
                 .addListener(new HelpListener())
                 .addListener(new TimeListener())
+                .addListener(new BouncerListener())
                 .addListener(new VersionListener())
                 .addListener(new TwitterListener())
                 .addListener(new HelloWorldListener())

@@ -1,6 +1,6 @@
 package com.jmpesp.halgnu.listeners;
 
-import com.jmpesp.halgnu.managers.IRCConnectionManager;
+import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.tasks.TwitterTask;
 import com.jmpesp.halgnu.util.CommandHelper;
 import com.jmpesp.halgnu.managers.ConfigManager;
@@ -9,17 +9,22 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 
-/**
- * Created by r4stl1n on 2/11/15.
- */
 public class TwitterListener extends ListenerAdapter {
 
     private String m_command = ".tweet";
+
+    private List<MemberModel.MemberStatus> neededPermissions =
+            new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
+                    MemberModel.MemberStatus.OG,
+                    MemberModel.MemberStatus.ADMIN,
+                    MemberModel.MemberStatus.MEMBER,
+                    MemberModel.MemberStatus.PROSPECT
+            ));
 
     private ConfigurationBuilder m_configBuilder;
     private TwitterFactory m_twitterFactory;

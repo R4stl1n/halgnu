@@ -21,6 +21,7 @@ public class ConfigManager {
     private String m_ircChannel;
     private String m_ircNick;
     private String m_ircPassword;
+    private String m_ircOwner;
 
     private String m_twitterConsumerKey;
     private String m_twitterConsumerSecret;
@@ -66,6 +67,7 @@ public class ConfigManager {
             // Load the credential specific information
             m_ircNick = credentials.get("nick");
             m_ircPassword = credentials.get("password");
+            m_ircOwner = credentials.get("owner");
 
             Ini.Section twitter = m_iniConfig.get("twitter");
             m_twitterConsumerKey = twitter.get("oauth.consumerKey");
@@ -114,4 +116,6 @@ public class ConfigManager {
     public String getTwitterAccessToken() { return m_twitterAccessToken; }
 
     public String getTwitterAccessSecret() { return m_twitterAccessSecret; }
+
+    public String getOwner() { return getOwner(); }
 }
