@@ -2,6 +2,7 @@ package com.jmpesp.halgnu.listeners;
 
 import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.util.CommandHelper;
+import com.jmpesp.halgnu.util.PermissionHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -38,10 +39,14 @@ public class GoogleSearchListener extends ListenerAdapter {
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
         if (event.getMessage().startsWith(m_command)) {
-            if(CommandHelper.checkForAmountOfArgs(event.getMessage(),1)) {
-                event.respond(getGoogleResult(CommandHelper.removeCommandFromString(event.getMessage())));
+            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
+                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                    event.respond(getGoogleResult(CommandHelper.removeCommandFromString(event.getMessage())));
+                } else {
+                    event.respond("Ex: " + m_command + " <query>");
+                }
             } else {
-                event.respond("Ex: "+m_command+" <query>");
+                event.respond("Permission denied");
             }
         }
     }

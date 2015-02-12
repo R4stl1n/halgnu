@@ -2,6 +2,7 @@ package com.jmpesp.halgnu.listeners;
 
 import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.util.CommandHelper;
+import com.jmpesp.halgnu.util.PermissionHelper;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
@@ -27,11 +28,16 @@ public class TimeListener extends ListenerAdapter {
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
         if (event.getMessage().startsWith(m_command)) {
-            if(CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
+            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
 
-                event.respond("Current Date/Time: " + getDateTime());
+                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
+
+                    event.respond("Current Date/Time: " + getDateTime());
+                } else {
+                    event.respond("Ex: " + m_command + "");
+                }
             } else {
-                event.respond("Ex: "+m_command+"");
+                event.respond("Permission denied");
             }
         }
     }

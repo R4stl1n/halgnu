@@ -2,6 +2,7 @@ package com.jmpesp.halgnu.listeners;
 
 import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.util.CommandHelper;
+import com.jmpesp.halgnu.util.PermissionHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -48,13 +49,18 @@ public class WebsiteHeaderListener extends ListenerAdapter {
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
         checkIfUrl(event.getMessage());
         if (event.getMessage().startsWith(m_command)) {
-            if(CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
-               
-                event.respond(getTitle());
-                
+            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
+
+                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
+
+                    event.respond(getTitle());
+
+                } else {
+
+                    event.respond("Ex: " + m_command + "");
+                }
             } else {
-                
-                event.respond("Ex: "+m_command+"");
+                event.respond("Permission denied");
             }
         }
     }

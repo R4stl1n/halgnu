@@ -4,6 +4,7 @@ import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.tasks.TwitterTask;
 import com.jmpesp.halgnu.util.CommandHelper;
 import com.jmpesp.halgnu.managers.ConfigManager;
+import com.jmpesp.halgnu.util.PermissionHelper;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import twitter4j.*;
@@ -50,16 +51,18 @@ public class TwitterListener extends ListenerAdapter {
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
         if (event.getMessage().startsWith(m_command)) {
-            if(CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                if(tweetMessage(CommandHelper.removeCommandFromString(event.getMessage())))
-                {
-                    event.respond("Tweeted");
-                }
-                else {
-                    event.respond("Error occurred when sending tweet.");
+            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
+                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                    if (tweetMessage(CommandHelper.removeCommandFromString(event.getMessage()))) {
+                        event.respond("Tweeted");
+                    } else {
+                        event.respond("Error occurred when sending tweet.");
+                    }
+                } else {
+                    event.respond("Ex: " + m_command + "");
                 }
             } else {
-                event.respond("Ex: "+m_command+"");
+                event.respond("Permission denied");
             }
         }
     }
