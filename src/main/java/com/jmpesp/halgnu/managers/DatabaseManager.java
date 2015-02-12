@@ -40,35 +40,57 @@ public class DatabaseManager {
         
     }
     
-    public void createMember(String username, String invitedBy) {
-        Date date = new Date();
-        MemberModel memberModel = new MemberModel();
-        
-        memberModel.setUserName(username);
-        memberModel.setInvitedBy(invitedBy);
-        memberModel.setMemberStatus(MemberModel.MemberStatus.PROSPECT);
-        memberModel.setDateInvited(date.toString());
-
+    public boolean createMember(String username, String invitedBy) {
         try {
-            m_memberDao.create(memberModel);
+            if(getMemberByUsername(username) == null) {
+                Date date = new Date();
+                MemberModel memberModel = new MemberModel();
+
+                memberModel.setUserName(username);
+                memberModel.setInvitedBy(invitedBy);
+                memberModel.setMemberStatus(MemberModel.MemberStatus.PROSPECT);
+                memberModel.setDateInvited(date.toString());
+
+                try {
+                    m_memberDao.create(memberModel);
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
+        
+        return false;
     }
 
-    public void createMember(String username, String invitedBy, MemberModel.MemberStatus memberStatus) {
-        Date date = new Date();
-        MemberModel memberModel = new MemberModel();
-        
-        memberModel.setUserName(username);
-        memberModel.setInvitedBy(invitedBy);
-        memberModel.setMemberStatus(memberStatus);
-        memberModel.setDateInvited(date.toString());
-
+    public boolean createMember(String username, String invitedBy, MemberModel.MemberStatus memberStatus) {
         try {
-            m_memberDao.create(memberModel);
+            if(getMemberByUsername(username) == null) {
+                Date date = new Date();
+                MemberModel memberModel = new MemberModel();
+
+                memberModel.setUserName(username);
+                memberModel.setInvitedBy(invitedBy);
+                memberModel.setMemberStatus(memberStatus);
+                memberModel.setDateInvited(date.toString());
+
+                try {
+                    m_memberDao.create(memberModel);
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
     

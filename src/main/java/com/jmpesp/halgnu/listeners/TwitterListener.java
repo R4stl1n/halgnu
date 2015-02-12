@@ -44,7 +44,7 @@ public class TwitterListener extends ListenerAdapter {
         m_twitterFactory = new TwitterFactory(m_configBuilder.build());
         m_twitter = m_twitterFactory.getInstance();
 
-        m_timer.scheduleAtFixedRate(new TwitterTask(), 1*60*1000, 1*60*1000);
+        m_timer.scheduleAtFixedRate(new TwitterTask(), 2*60*1000, 2*60*1000);
     }
 
     @Override

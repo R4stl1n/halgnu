@@ -12,7 +12,6 @@ public class PermissionHelper {
         try {
             MemberModel member = DatabaseManager.getInstance().getMemberByUsername(username);
             if(member == null) {
-                System.out.println("SHIT WAS NULL");
                 return false;
             } else {
                 for (MemberModel.MemberStatus status : permissions) {
