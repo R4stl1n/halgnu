@@ -9,7 +9,7 @@
 *.iws
 
 config.ini
-
+halgnu.db
 # Mac
 .DS_Store
 
