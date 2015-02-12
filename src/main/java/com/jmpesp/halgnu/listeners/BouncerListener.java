@@ -7,6 +7,7 @@ import com.jmpesp.halgnu.util.PermissionHelper;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,50 +55,78 @@ public class BouncerListener extends ListenerAdapter {
 
         // Handle Invite Command
         if (event.getMessage().startsWith(m_inviteCommand)) {
-            if(PermissionHelper.HasPermissionFromList(neededInvitePermissions, event.getUser().getNick())) {
-                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                    if(DatabaseManager.getInstance().createMember(CommandHelper.removeCommandFromString(event.getMessage()).trim()
-                            ,event.getUser().getNick())) {
-                        event.respond("User added to registry");
-                    } else {
-                        event.respond("User already in registry");
-                    }
-                } else {
-                    event.respond("Ex: " + m_inviteCommand + " <usernamehere>");
-                }
-            } else {
-                event.respond("Permission denied");
-            }
+            handleInviteCommand(event);
         }
 
         // Handle WhoIvited Command
         if (event.getMessage().startsWith(m_whoInvitedCommand)) {
-            if(PermissionHelper.HasPermissionFromList(neededWhoInvitedPermissions, event.getUser().getNick())) {
+            handleWhoInvitedCommand(event);
+        }
 
-                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                    MemberModel member = DatabaseManager.getInstance()
+        // Handle MemberStatus Command
+        if (event.getMessage().startsWith(m_memberStatusCommand)) {
+            handleMemberStatusCommand(event);
+        }
+
+        // Handle statusOfMember Command
+        if (event.getMessage().startsWith(m_statusOfMember)) {
+            handleStatusOfMemberCommand(event);
+        }
+    }
+    
+
+    public void handleInviteCommand(GenericMessageEvent event) {
+        if(PermissionHelper.HasPermissionFromList(neededInvitePermissions, event.getUser().getNick())) {
+            if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                if(DatabaseManager.getInstance().createMember(CommandHelper.removeCommandFromString(event.getMessage()).trim()
+                        ,event.getUser().getNick())) {
+                    event.respond("User added to registry");
+                } else {
+                    event.respond("User already in registry");
+                }
+            } else {
+                event.respond("Ex: " + m_inviteCommand + " <usernamehere>");
+            }
+        } else {
+            event.respond("Permission denied");
+        }
+    }
+    
+    public void handleWhoInvitedCommand(GenericMessageEvent event) {
+        if(PermissionHelper.HasPermissionFromList(neededWhoInvitedPermissions, event.getUser().getNick())) {
+
+            if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                MemberModel member = null;
+                try {
+                    member = DatabaseManager.getInstance()
                             .getMemberByUsername(CommandHelper.removeCommandFromString(event.getMessage()).trim());
+
                     if(member != null) {
                         event.respond(member.getInvitedBy() + " invited " + member.getUserName() + " on " + member.getDateInvited());
                     } else {
                         event.respond("User not in registry");
                     }
-                } else {
-                    event.respond("Ex: " + m_whoInvitedCommand + " <usernamehere>");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    event.respond("User not in registry");
                 }
             } else {
-                event.respond("Permission denied");
+                event.respond("Ex: " + m_whoInvitedCommand + " <usernamehere>");
             }
+        } else {
+            event.respond("Permission denied");
         }
+    }
+    
+    public void handleMemberStatusCommand(GenericMessageEvent event) {
+        if(PermissionHelper.HasPermissionFromList(neededMemberStatusPermissions, event.getUser().getNick())) {
 
-
-        // Handle MemberStatus Command
-        if (event.getMessage().startsWith(m_memberStatusCommand)) {
-            if(PermissionHelper.HasPermissionFromList(neededMemberStatusPermissions, event.getUser().getNick())) {
-
-                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
-                    MemberModel member = DatabaseManager.getInstance()
+            if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
+                MemberModel member = null;
+                try {
+                    member = DatabaseManager.getInstance()
                             .getMemberByUsername(event.getUser().getNick().trim());
+
                     if(member != null) {
                         if(member.getMemberStatus().equals(MemberModel.MemberStatus.OG)) {
                             event.respond("Your member status is: OG");
@@ -117,38 +146,50 @@ public class BouncerListener extends ListenerAdapter {
                     } else {
                         event.respond("User not in registry");
                     }
-                } else {
-                    event.respond("Ex: " + m_whoInvitedCommand + " <usernamehere>");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    event.respond("User not in registry");
                 }
             } else {
-                event.respond("Permission denied");
+                event.respond("Ex: " + m_whoInvitedCommand + " <usernamehere>");
             }
+        } else {
+            event.respond("Permission denied");
         }
-
+    }
+    
+    public void handleStatusOfMemberCommand(GenericMessageEvent event) {
         // Handle statusOfMember Command
         if (event.getMessage().startsWith(m_statusOfMember)) {
             if(PermissionHelper.HasPermissionFromList(neededStatusOfMemberPermissions, event.getUser().getNick())) {
 
                 if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                    MemberModel member = DatabaseManager.getInstance()
-                            .getMemberByUsername(CommandHelper.removeCommandFromString(event.getMessage()).trim());
-                    if(member != null) {
-                        if(member.getMemberStatus().equals(MemberModel.MemberStatus.OG)) {
-                            event.respond(member.getUserName()+"'s member status is: OG");
-                        }
+                    MemberModel member = null;
+                    try {
+                        member = DatabaseManager.getInstance()
+                                .getMemberByUsername(CommandHelper.removeCommandFromString(event.getMessage()).trim());
 
-                        if(member.getMemberStatus().equals(MemberModel.MemberStatus.ADMIN)) {
-                            event.respond(member.getUserName()+"'s member status is: ADMIN");
-                        }
+                        if(member != null) {
+                            if(member.getMemberStatus().equals(MemberModel.MemberStatus.OG)) {
+                                event.respond(member.getUserName()+"'s member status is: OG");
+                            }
 
-                        if(member.getMemberStatus().equals(MemberModel.MemberStatus.MEMBER)) {
-                            event.respond(member.getUserName()+"'s member status is: MEMBER");
-                        }
+                            if(member.getMemberStatus().equals(MemberModel.MemberStatus.ADMIN)) {
+                                event.respond(member.getUserName()+"'s member status is: ADMIN");
+                            }
 
-                        if(member.getMemberStatus().equals(MemberModel.MemberStatus.PROSPECT)) {
-                            event.respond(member.getUserName()+"'s member status is: PROSPECT");
+                            if(member.getMemberStatus().equals(MemberModel.MemberStatus.MEMBER)) {
+                                event.respond(member.getUserName()+"'s member status is: MEMBER");
+                            }
+
+                            if(member.getMemberStatus().equals(MemberModel.MemberStatus.PROSPECT)) {
+                                event.respond(member.getUserName()+"'s member status is: PROSPECT");
+                            }
+                        } else {
+                            event.respond("User not in registry");
                         }
-                    } else {
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                         event.respond("User not in registry");
                     }
                 } else {
