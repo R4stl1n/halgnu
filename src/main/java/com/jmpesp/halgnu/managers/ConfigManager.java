@@ -117,5 +117,5 @@ public class ConfigManager {
 
     public String getTwitterAccessSecret() { return m_twitterAccessSecret; }
 
-    public String getOwner() { return getOwner(); }
+    public String getIrcOwner() { return m_ircOwner; }
 }

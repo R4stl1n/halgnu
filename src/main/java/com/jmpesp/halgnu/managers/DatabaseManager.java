@@ -11,8 +11,11 @@ import java.util.Date;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.table.TableUtils;
 import com.jmpesp.halgnu.models.MemberModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DatabaseManager {
+    private final Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
 
     private static DatabaseManager m_instance;
     private static ConnectionSource m_connectionSource;
@@ -20,18 +23,17 @@ public class DatabaseManager {
     private static Dao<MemberModel, String> m_memberDao;
 
     protected DatabaseManager() {
-        // this uses h2 by default but change to match your database
         String databaseUrl = "jdbc:sqlite:halgnu.db";
-        // create a connection source to our database
+
         try {
             m_connectionSource = new JdbcConnectionSource(databaseUrl);
             
-            // Create dao
+            // Create daos
             m_memberDao = DaoManager.createDao(m_connectionSource, MemberModel.class);
             
             // Check if tables need to be created
             CheckDatabaseExists();
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -82,8 +84,17 @@ public class DatabaseManager {
         File configFile = new File("halgnu.db");
 
         if(!configFile.exists()) {
+            logger.info("Database not found creating new one");
             TableUtils.createTable(m_connectionSource, MemberModel.class);
+
+            logger.info("Added owner to database");
+
+            // Create owner in table
+            createMember(ConfigManager.getInstance().getIrcOwner(),
+                    ConfigManager.getInstance().getIrcNick(), MemberModel.MemberStatus.OG);
         }
+
+        logger.info("Database found");
     }
     
     public static DatabaseManager getInstance() {

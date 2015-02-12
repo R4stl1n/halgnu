@@ -11,12 +11,16 @@ public class PermissionHelper {
     public static boolean HasPermissionFromList(List<MemberModel.MemberStatus> permissions, String username) {
         try {
             MemberModel member = DatabaseManager.getInstance().getMemberByUsername(username);
-            for(MemberModel.MemberStatus status: permissions) {
-                if(member.getMemberStatus() == status) {
-                    return true;
+            if(member == null) {
+                System.out.println("SHIT WAS NULL");
+                return false;
+            } else {
+                for (MemberModel.MemberStatus status : permissions) {
+                    if (member.getMemberStatus().equals(status)){
+                        return true;
+                    }
                 }
             }
-
             return false;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -15,17 +15,15 @@ public class HalGNUMain {
         if(ConfigManager.getInstance().checkConfigExist()) {
 
             if(ConfigManager.getInstance().loadConfigurationFile()) {
-                IRCConnectionManager.getInstance();
+
                 if(IRCConnectionManager.getInstance().startConnection()) {
                     m_logger.info("Connection established successfully");
                 } else {
-                    m_logger.error("Error occured when connecting");
+                    m_logger.error("Error occurred when connecting");
                 }
 
 
             }
         }
-
-        DatabaseManager.getInstance();
     }
 }
