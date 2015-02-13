@@ -138,7 +138,7 @@ public class BouncerListener extends ListenerAdapter {
                     } else {
                         event.respond("Removed " + numKicked + " users");
                     }
-                    
+
                     event.respond("Scan complete");
 
                 } else {
