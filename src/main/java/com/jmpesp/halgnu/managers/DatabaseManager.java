@@ -113,7 +113,7 @@ public class DatabaseManager {
 
             // Create owner in table
             createMember(ConfigManager.getInstance().getIrcOwner(),
-                    ConfigManager.getInstance().getIrcNick(), MemberModel.MemberStatus.OG);
+                    ConfigManager.getInstance().getIrcNick(), MemberModel.MemberStatus.ADMIN);
         }
 
         logger.info("Database found");
