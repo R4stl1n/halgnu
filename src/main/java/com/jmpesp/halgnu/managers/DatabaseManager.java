@@ -40,6 +40,10 @@ public class DatabaseManager {
         
     }
     
+    public Dao<MemberModel, String> getMemberDao() {
+        return m_memberDao;
+    }
+    
     public boolean createMember(String username, String invitedBy) {
         try {
             if(getMemberByUsername(username) == null) {

@@ -27,12 +27,32 @@ public class HelpListener extends ListenerAdapter {
 
         if (event.getMessage().startsWith(m_command)) {
             if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
-
-                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
-                    event.respond("Available commands are .t, .g, .hello, .v");
+                
+                if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                    String help = CommandHelper.removeCommandFromString(event.getMessage()).trim();
+                    
+                    if(help.equals("bouncer")) {
+                        BouncerListener.sendHelpMsg(event);
+                    } else if (help.equals("google")) {
+                        GoogleSearchListener.sendHelpMsg(event);
+                    } else if (help.equals("helloworld")) {
+                        HelloWorldListener.sendHelpMsg(event);
+                    } else if (help.equals("time")) {
+                        TimeListener.sendHelpMsg(event);
+                    } else if (help.equals("twitter")) {
+                        TwitterListener.sendHelpMsg(event);
+                    } else if (help.equals("version")) {
+                        VersionListener.sendHelpMsg(event);
+                    } else if (help.equals("website")) {
+                        WebsiteHeaderListener.sendHelpMsg(event);
+                    } else {
+                        event.respond("Help module not found");
+                    }
                 } else {
-                    event.respond("Ex: " + m_command + "");
+                    event.respond("Loaded modules are: bouncer, helloworld, help, time, twitter, version, website");
+                    event.respond("Ex. .help <module>");
                 }
+                
             }else {
                 event.respond("Permission denied");
             }

@@ -26,7 +26,7 @@ import java.util.List;
 public class GoogleSearchListener extends ListenerAdapter {
 
     private String m_command = ".google";
-
+    
     private List<MemberModel.MemberStatus> neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
@@ -35,6 +35,10 @@ public class GoogleSearchListener extends ListenerAdapter {
                     MemberModel.MemberStatus.PROSPECT
             ));
 
+    public static void sendHelpMsg(GenericMessageEvent event) {
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".google <query> - Google query to execute");
+    }
+    
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 

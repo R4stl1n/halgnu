@@ -11,6 +11,8 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
+import javax.xml.crypto.Data;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +25,8 @@ public class BouncerListener extends ListenerAdapter {
     private String m_memberStatusCommand = ".memberStatus";
     private String m_statusOfMember = ".statusOfMember";
     private String m_enforceCommand = ".enforce";
-
+    private String m_changeStatusCommand = ".changeStatus";
+    
     private List<MemberModel.MemberStatus> neededInvitePermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
@@ -55,13 +58,27 @@ public class BouncerListener extends ListenerAdapter {
                     MemberModel.MemberStatus.PROSPECT
             ));
 
-    private List<MemberModel.MemberStatus> neededEnforcePermissions =
+    private List<MemberModel.MemberStatus> neededChangeStatusPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.ADMIN
             ));
 
+    private List<MemberModel.MemberStatus> neededEnforcePermissions =
+            new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
+                    MemberModel.MemberStatus.ADMIN
+            ));
+    
     private boolean m_enforce = false;
 
+    public static void sendHelpMsg(GenericMessageEvent event) {
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".invite <user> - Used to invite user to room");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".whoInvited <user> - Returns who invited the user");
+        event.getBot().sendIRC().message(event.getUser().getNick(),".memberStatus - Returns your member status");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".statusOfMember <member> - Returns status of desired member");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".enforce - Enables/Disables bouncer enforcement");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".changeStatus <user> <status> - Change users membership status");
+    }
+    
     @Override
     public void onJoin(final JoinEvent join) throws Exception {
 
@@ -106,9 +123,72 @@ public class BouncerListener extends ListenerAdapter {
         if (event.getMessage().startsWith(m_statusOfMember)) {
             handleStatusOfMemberCommand(event);
         }
+        
+        if (event.getMessage().startsWith(m_changeStatusCommand)) {
+            handleChangeStatusCommand(event);
+        }
+    }
+    
+    private void handleChangeStatusCommand(GenericMessageEvent event) {
+        if(PermissionHelper.HasPermissionFromList(neededChangeStatusPermissions, event.getUser().getNick())) {
+            if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 2)) {
+                String arguments = CommandHelper.removeCommandFromString(event.getMessage());
+                String[] splitArguments = arguments.split(" ");
+                
+                if(splitArguments.length == 2 ) {
+                    try {
+                        MemberModel member = DatabaseManager.getInstance().getMemberByUsername(splitArguments[0]);
+                        
+                        if(member != null) {
+                            String status = splitArguments[1];
+                            boolean success = false;
+                            
+                            if(status.equals("og")) {
+                                success = true;
+                                member.setMemberStatus(MemberModel.MemberStatus.OG);
+                                DatabaseManager.getInstance().getMemberDao().update(member);
+                            } else if (status.equals("admin")) {
+                                success = true;
+                                member.setMemberStatus(MemberModel.MemberStatus.ADMIN);
+                                DatabaseManager.getInstance().getMemberDao().update(member);
+                            } else if (status.equals("member")) {
+                                success = true;
+                                member.setMemberStatus(MemberModel.MemberStatus.MEMBER);
+                                DatabaseManager.getInstance().getMemberDao().update(member);
+                            } else if (status.equals("prospect")) {
+                                success = true;
+                                member.setMemberStatus(MemberModel.MemberStatus.PROSPECT);
+                                DatabaseManager.getInstance().getMemberDao().update(member);
+                            } else {
+                                event.respond("Unknown status detected");
+                            }
+                            
+                            if(success) {
+                                event.respond("Status update completed");
+                            }
+                            
+                        } else {
+                            event.respond("Member not found");
+                        }
+                        
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        event.respond("Issue with query");
+                    }
+
+                } else {
+                    event.respond("Ex. <username> <status> | admin,og,member,prospect 2");
+                }
+            } else {
+                event.respond("Ex. <username> <status> | admin,og,member,prospect 1");
+            }
+        }
+        else {
+            event.respond("Permission denied");
+        }
     }
 
-    public void handleEnforceCommand(GenericMessageEvent event) {
+    private void handleEnforceCommand(GenericMessageEvent event) {
         int numKicked = 0;
 
         if(PermissionHelper.HasPermissionFromList(neededEnforcePermissions, event.getUser().getNick())) {
@@ -145,10 +225,12 @@ public class BouncerListener extends ListenerAdapter {
                     event.respond("Deactivating enforcement mode");
                 }
             }
+        } else {
+            event.respond("Permission denied");
         }
     }
 
-    public void handleInviteCommand(GenericMessageEvent event) {
+    private void handleInviteCommand(GenericMessageEvent event) {
         if(PermissionHelper.HasPermissionFromList(neededInvitePermissions, event.getUser().getNick())) {
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                 if(DatabaseManager.getInstance().createMember(CommandHelper.removeCommandFromString(event.getMessage()).trim()
@@ -164,8 +246,8 @@ public class BouncerListener extends ListenerAdapter {
             event.respond("Permission denied");
         }
     }
-    
-    public void handleWhoInvitedCommand(GenericMessageEvent event) {
+
+    private void handleWhoInvitedCommand(GenericMessageEvent event) {
         if(PermissionHelper.HasPermissionFromList(neededWhoInvitedPermissions, event.getUser().getNick())) {
 
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
@@ -190,8 +272,8 @@ public class BouncerListener extends ListenerAdapter {
             event.respond("Permission denied");
         }
     }
-    
-    public void handleMemberStatusCommand(GenericMessageEvent event) {
+
+    private void handleMemberStatusCommand(GenericMessageEvent event) {
         if(PermissionHelper.HasPermissionFromList(neededMemberStatusPermissions, event.getUser().getNick())) {
 
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
@@ -230,8 +312,8 @@ public class BouncerListener extends ListenerAdapter {
             event.respond("Permission denied");
         }
     }
-    
-    public void handleStatusOfMemberCommand(GenericMessageEvent event) {
+
+    private void handleStatusOfMemberCommand(GenericMessageEvent event) {
         // Handle statusOfMember Command
         if (event.getMessage().startsWith(m_statusOfMember)) {
             if(PermissionHelper.HasPermissionFromList(neededStatusOfMemberPermissions, event.getUser().getNick())) {

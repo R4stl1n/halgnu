@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 public class WebsiteHeaderListener extends ListenerAdapter {
 
     private String m_command = ".title";
+    
     private List<MemberModel.MemberStatus> neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
@@ -43,6 +44,10 @@ public class WebsiteHeaderListener extends ListenerAdapter {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void sendHelpMsg(GenericMessageEvent event) {
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".title - Returns the title of the last link posted.");
     }
 
     @Override

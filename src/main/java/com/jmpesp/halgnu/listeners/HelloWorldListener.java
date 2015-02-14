@@ -13,7 +13,7 @@ import java.util.List;
 public class HelloWorldListener extends ListenerAdapter {
 
     private String m_command = ".hello";
-
+    
     private List<MemberModel.MemberStatus> neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
@@ -21,6 +21,10 @@ public class HelloWorldListener extends ListenerAdapter {
                     MemberModel.MemberStatus.MEMBER,
                     MemberModel.MemberStatus.PROSPECT
             ));
+
+    public static void sendHelpMsg(GenericMessageEvent event) {
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".hello - Useless just send hello world");
+    }
 
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {

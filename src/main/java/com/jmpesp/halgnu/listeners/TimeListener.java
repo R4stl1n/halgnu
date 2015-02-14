@@ -14,8 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 public class TimeListener extends ListenerAdapter {
+    
     private String m_command = ".time";
-
+    
     private List<MemberModel.MemberStatus> neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
@@ -24,6 +25,10 @@ public class TimeListener extends ListenerAdapter {
                     MemberModel.MemberStatus.PROSPECT
             ));
 
+    public static void sendHelpMsg(GenericMessageEvent event) {
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".time - Returns the current time");
+    }
+    
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 

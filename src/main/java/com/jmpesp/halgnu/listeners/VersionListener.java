@@ -22,6 +22,10 @@ public class VersionListener extends ListenerAdapter {
                     MemberModel.MemberStatus.PROSPECT
             ));
 
+    public static void sendHelpMsg(GenericMessageEvent event) {
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".version - Returns the current version");
+    }
+
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 

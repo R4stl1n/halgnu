@@ -19,12 +19,12 @@ public class TwitterListener extends ListenerAdapter {
 
     private String m_command = ".tweet";
 
+
     private List<MemberModel.MemberStatus> neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
-                    MemberModel.MemberStatus.MEMBER,
-                    MemberModel.MemberStatus.PROSPECT
+                    MemberModel.MemberStatus.MEMBER
             ));
 
     private ConfigurationBuilder m_configBuilder;
@@ -33,6 +33,10 @@ public class TwitterListener extends ListenerAdapter {
 
     private Timer m_timer;
 
+    public static void sendHelpMsg(GenericMessageEvent event) {
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".tweet <tweet> - Used to send out a tweet under group account");
+    }
+    
     public TwitterListener() {
         m_timer = new Timer();
         m_configBuilder = new ConfigurationBuilder();
