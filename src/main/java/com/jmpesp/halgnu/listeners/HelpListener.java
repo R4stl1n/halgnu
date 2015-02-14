@@ -1,6 +1,7 @@
 package com.jmpesp.halgnu.listeners;
 
 import com.jmpesp.halgnu.models.MemberModel;
+import com.jmpesp.halgnu.util.AdminCmdHelper;
 import com.jmpesp.halgnu.util.CommandHelper;
 import com.jmpesp.halgnu.util.PermissionHelper;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -45,11 +46,13 @@ public class HelpListener extends ListenerAdapter {
                         VersionListener.sendHelpMsg(event);
                     } else if (help.equals("website")) {
                         WebsiteHeaderListener.sendHelpMsg(event);
+                    } else if (help.equals("admin")) {
+                        AdminCmdListener.sendHelpMsg(event);
                     } else {
                         event.respond("Help module not found");
                     }
                 } else {
-                    event.respond("Loaded modules are: bouncer, helloworld, help, time, twitter, version, website");
+                    event.respond("Loaded modules are: admin, bouncer, helloworld, help, time, twitter, version, website");
                     event.respond("Ex. .help <module>");
                 }
                 
