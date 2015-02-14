@@ -124,6 +124,7 @@ public class BouncerListener extends ListenerAdapter {
             handleStatusOfMemberCommand(event);
         }
         
+        // Handle changeStatus Command
         if (event.getMessage().startsWith(m_changeStatusCommand)) {
             handleChangeStatusCommand(event);
         }
