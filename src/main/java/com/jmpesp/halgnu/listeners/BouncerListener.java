@@ -26,6 +26,7 @@ public class BouncerListener extends ListenerAdapter {
     private String m_statusOfMember = ".statusOfMember";
     private String m_enforceCommand = ".enforce";
     private String m_changeStatusCommand = ".changeStatus";
+    private String m_removeMemberCommand = ".removeMember";
     
     private List<MemberModel.MemberStatus> neededInvitePermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
@@ -67,6 +68,11 @@ public class BouncerListener extends ListenerAdapter {
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.ADMIN
             ));
+
+    private List<MemberModel.MemberStatus> neededRemoveMemberPermissions =
+            new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
+                    MemberModel.MemberStatus.ADMIN
+            ));
     
     private boolean m_enforce = false;
 
@@ -77,6 +83,7 @@ public class BouncerListener extends ListenerAdapter {
         event.getBot().sendIRC().message(event.getUser().getNick(), ".statusOfMember <member> - Returns status of desired member");
         event.getBot().sendIRC().message(event.getUser().getNick(), ".enforce - Enables/Disables bouncer enforcement");
         event.getBot().sendIRC().message(event.getUser().getNick(), ".changeStatus <user> <status> - Change users membership status");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".removeMember <user> - Removes user from the room");
     }
     
     @Override
@@ -127,6 +134,35 @@ public class BouncerListener extends ListenerAdapter {
         // Handle changeStatus Command
         if (event.getMessage().startsWith(m_changeStatusCommand)) {
             handleChangeStatusCommand(event);
+        }
+        
+        // Handle remove member
+        if (event.getMessage().startsWith(m_removeMemberCommand)) {
+            handleRemoveMemberCommand(event);
+        }
+    }
+    
+    private void handleRemoveMemberCommand(GenericMessageEvent event) {
+        if(PermissionHelper.HasPermissionFromList(neededRemoveMemberPermissions, event.getUser().getNick())) {
+            if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
+                try {
+                    MemberModel member = DatabaseManager.getInstance().getMemberByUsername(CommandHelper.removeCommandFromString(event.getMessage()).trim());
+                    if (member != null) {
+                        DatabaseManager.getInstance().getMemberDao().delete(member);
+                        event.respond("User removed from database");
+                        AdminCmdHelper.kickUserFromRoom(CommandHelper.removeCommandFromString(event.getMessage()).trim(), "Membership_Revoked");
+                        
+                    } else {
+                        event.respond("User does not exist");
+                    }
+                } catch (SQLException e) {
+                    event.respond("User does not exist");
+                }
+            } else {
+                event.respond("Ex: " + m_removeMemberCommand + " <user>");
+            }
+        } else {
+            event.respond("Permission denied");
         }
     }
     

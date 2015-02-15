@@ -1,5 +1,6 @@
 package com.jmpesp.halgnu.listeners;
 
+import com.jmpesp.halgnu.managers.ConfigManager;
 import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.util.AdminCmdHelper;
 import com.jmpesp.halgnu.util.CommandHelper;
@@ -18,7 +19,6 @@ public class AdminCmdListener extends ListenerAdapter {
 
     private List<MemberModel.MemberStatus> neededKickPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
-                    MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN
             ));
 
@@ -50,7 +50,9 @@ public class AdminCmdListener extends ListenerAdapter {
     private void handleKickCommand(GenericMessageEvent event) {
         if(PermissionHelper.HasPermissionFromList(neededKickPermissions, event.getUser().getNick())) {
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                AdminCmdHelper.kickUserFromRoom(CommandHelper.removeCommandFromString(event.getMessage()), "Admin Request");
+                if(!CommandHelper.removeCommandFromString(event.getMessage()).trim().equals(ConfigManager.getInstance().getIrcNick())) {
+                    AdminCmdHelper.kickUserFromRoom(CommandHelper.removeCommandFromString(event.getMessage()), "Admin_Request");
+                }
             } else {
                 event.respond("Ex: " + m_kickCommand + " <user>");
             }

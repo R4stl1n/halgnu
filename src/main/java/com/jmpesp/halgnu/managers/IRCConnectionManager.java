@@ -24,7 +24,6 @@ public class IRCConnectionManager {
                 .setNickservPassword(ConfigManager.getInstance().getIrcPassword())
                 .setAutoNickChange(true)
                 .setServer(ConfigManager.getInstance().getIrcServer(), ConfigManager.getInstance().getIrcPort())
-                .addAutoJoinChannel(ConfigManager.getInstance().getIrcChannel())
                 .setSocketFactory(SSLSocketFactory.getDefault())
                 .addListener(new HelpListener())
                 .addListener(new TimeListener())
@@ -35,6 +34,7 @@ public class IRCConnectionManager {
                 .addListener(new HelloWorldListener())
                 .addListener(new GoogleSearchListener())
                 .addListener(new WebsiteHeaderListener())
+                .addAutoJoinChannel(ConfigManager.getInstance().getIrcChannel())
                 .buildConfiguration();
 
     }

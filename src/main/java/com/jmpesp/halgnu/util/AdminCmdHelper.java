@@ -6,7 +6,7 @@ import com.jmpesp.halgnu.managers.IRCConnectionManager;
 public class AdminCmdHelper {
 
     public static void changeTopic(String topic) {
-        String command = "topic "+ConfigManager.getInstance().getIrcChannel()+" ";
+        String command = "topic "+ConfigManager.getInstance().getIrcChannel()+" :";
 
         if(!topic.isEmpty()) {
             IRCConnectionManager.getInstance().getBotConnection().sendRaw().rawLine(command + topic);
