@@ -2,8 +2,10 @@ HalGNU IRC Bot 1.0
 ============
 
 ### Description
-
 HalGNU is a irc bot designed to be a helpful irc bot for member only irc channels.
+
+### Why java
+Needed a project that would force me to use a language I purposely avoid.
 
 ### Modules
 
@@ -77,8 +79,3 @@ Basic website url module
 ```
 .title - Returns the title of the last link posted.
 ```
-
-### Why java
-
-Needed a project that would force me to use a language I purposely avoid.
-
