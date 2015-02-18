@@ -22,12 +22,12 @@ Features for member only rooms. Bouncer is capable of maintaining a white list o
 
 ```
 .invite <user> - Used to invite user to room
-.whoInvited <user> - Returns who invited the user
-.memberStatus - Returns your member status
-.statusOfMember <member> - Returns status of desired member
+.whoinvited <user> - Returns who invited the user
+.memberstatus - Returns your member status
+.statusofmember <member> - Returns status of desired member
 .enforce - Enables/Disables bouncer enforcement
-.changeStatus <user> <status> - Change users membership status
-.removeMember <user> - Removes user from the room
+.changestatus <user> <status> - Change users membership status
+.removemember <user> - Removes user from the room
 ```
 
 #### Google
