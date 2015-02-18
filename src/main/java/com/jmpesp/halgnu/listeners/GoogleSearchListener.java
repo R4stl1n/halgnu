@@ -4,21 +4,14 @@ import com.jmpesp.halgnu.models.MemberModel;
 import com.jmpesp.halgnu.util.CommandHelper;
 import com.jmpesp.halgnu.util.PermissionHelper;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +20,7 @@ public class GoogleSearchListener extends ListenerAdapter {
 
     private String m_command = ".google";
     
-    private List<MemberModel.MemberStatus> neededPermissions =
+    private List<MemberModel.MemberStatus> m_neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
@@ -43,7 +36,7 @@ public class GoogleSearchListener extends ListenerAdapter {
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
         if (event.getMessage().startsWith(m_command)) {
-            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
+            if(PermissionHelper.HasPermissionFromList(m_neededPermissions, event.getUser().getNick())) {
                 if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                     event.respond(getGoogleResult(CommandHelper.removeCommandFromString(event.getMessage())));
                 } else {

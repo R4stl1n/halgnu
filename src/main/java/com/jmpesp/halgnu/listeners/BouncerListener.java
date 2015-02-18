@@ -11,8 +11,6 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
-import javax.xml.crypto.Data;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,14 +26,14 @@ public class BouncerListener extends ListenerAdapter {
     private String m_changeStatusCommand = ".changestatus";
     private String m_removeMemberCommand = ".removemember";
     
-    private List<MemberModel.MemberStatus> neededInvitePermissions =
+    private List<MemberModel.MemberStatus> m_neededInvitePermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
                     MemberModel.MemberStatus.MEMBER
             ));
 
-    private List<MemberModel.MemberStatus> neededWhoInvitedPermissions =
+    private List<MemberModel.MemberStatus> m_neededWhoInvitedPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
@@ -43,7 +41,7 @@ public class BouncerListener extends ListenerAdapter {
                     MemberModel.MemberStatus.PROSPECT
             ));
 
-    private List<MemberModel.MemberStatus> neededMemberStatusPermissions =
+    private List<MemberModel.MemberStatus> m_neededMemberStatusPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
@@ -51,7 +49,7 @@ public class BouncerListener extends ListenerAdapter {
                     MemberModel.MemberStatus.PROSPECT
             ));
 
-    private List<MemberModel.MemberStatus> neededStatusOfMemberPermissions =
+    private List<MemberModel.MemberStatus> m_neededStatusOfMemberPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
@@ -59,17 +57,17 @@ public class BouncerListener extends ListenerAdapter {
                     MemberModel.MemberStatus.PROSPECT
             ));
 
-    private List<MemberModel.MemberStatus> neededChangeStatusPermissions =
+    private List<MemberModel.MemberStatus> m_neededChangeStatusPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.ADMIN
             ));
 
-    private List<MemberModel.MemberStatus> neededEnforcePermissions =
+    private List<MemberModel.MemberStatus> m_neededEnforcePermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.ADMIN
             ));
 
-    private List<MemberModel.MemberStatus> neededRemoveMemberPermissions =
+    private List<MemberModel.MemberStatus> m_neededRemoveMemberPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.ADMIN
             ));
@@ -143,7 +141,7 @@ public class BouncerListener extends ListenerAdapter {
     }
     
     private void handleRemoveMemberCommand(GenericMessageEvent event) {
-        if(PermissionHelper.HasPermissionFromList(neededRemoveMemberPermissions, event.getUser().getNick())) {
+        if(PermissionHelper.HasPermissionFromList(m_neededRemoveMemberPermissions, event.getUser().getNick())) {
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                 try {
                     MemberModel member = DatabaseManager.getInstance().getMemberByUsername(CommandHelper.removeCommandFromString(event.getMessage()).trim());
@@ -167,7 +165,7 @@ public class BouncerListener extends ListenerAdapter {
     }
     
     private void handleChangeStatusCommand(GenericMessageEvent event) {
-        if(PermissionHelper.HasPermissionFromList(neededChangeStatusPermissions, event.getUser().getNick())) {
+        if(PermissionHelper.HasPermissionFromList(m_neededChangeStatusPermissions, event.getUser().getNick())) {
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 2)) {
                 String arguments = CommandHelper.removeCommandFromString(event.getMessage());
                 String[] splitArguments = arguments.split(" ");
@@ -228,7 +226,7 @@ public class BouncerListener extends ListenerAdapter {
     private void handleEnforceCommand(GenericMessageEvent event) {
         int numKicked = 0;
 
-        if(PermissionHelper.HasPermissionFromList(neededEnforcePermissions, event.getUser().getNick())) {
+        if(PermissionHelper.HasPermissionFromList(m_neededEnforcePermissions, event.getUser().getNick())) {
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
 
                 m_enforce = !m_enforce;
@@ -268,7 +266,7 @@ public class BouncerListener extends ListenerAdapter {
     }
 
     private void handleInviteCommand(GenericMessageEvent event) {
-        if(PermissionHelper.HasPermissionFromList(neededInvitePermissions, event.getUser().getNick())) {
+        if(PermissionHelper.HasPermissionFromList(m_neededInvitePermissions, event.getUser().getNick())) {
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                 if(DatabaseManager.getInstance().createMember(CommandHelper.removeCommandFromString(event.getMessage()).trim()
                         ,event.getUser().getNick())) {
@@ -285,7 +283,7 @@ public class BouncerListener extends ListenerAdapter {
     }
 
     private void handleWhoInvitedCommand(GenericMessageEvent event) {
-        if(PermissionHelper.HasPermissionFromList(neededWhoInvitedPermissions, event.getUser().getNick())) {
+        if(PermissionHelper.HasPermissionFromList(m_neededWhoInvitedPermissions, event.getUser().getNick())) {
 
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                 MemberModel member = null;
@@ -311,7 +309,7 @@ public class BouncerListener extends ListenerAdapter {
     }
 
     private void handleMemberStatusCommand(GenericMessageEvent event) {
-        if(PermissionHelper.HasPermissionFromList(neededMemberStatusPermissions, event.getUser().getNick())) {
+        if(PermissionHelper.HasPermissionFromList(m_neededMemberStatusPermissions, event.getUser().getNick())) {
 
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
                 MemberModel member = null;
@@ -353,7 +351,7 @@ public class BouncerListener extends ListenerAdapter {
     private void handleStatusOfMemberCommand(GenericMessageEvent event) {
         // Handle statusOfMember Command
         if (event.getMessage().startsWith(m_statusOfMember)) {
-            if(PermissionHelper.HasPermissionFromList(neededStatusOfMemberPermissions, event.getUser().getNick())) {
+            if(PermissionHelper.HasPermissionFromList(m_neededStatusOfMemberPermissions, event.getUser().getNick())) {
 
                 if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                     MemberModel member = null;

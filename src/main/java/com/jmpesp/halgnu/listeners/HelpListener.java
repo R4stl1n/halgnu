@@ -1,7 +1,6 @@
 package com.jmpesp.halgnu.listeners;
 
 import com.jmpesp.halgnu.models.MemberModel;
-import com.jmpesp.halgnu.util.AdminCmdHelper;
 import com.jmpesp.halgnu.util.CommandHelper;
 import com.jmpesp.halgnu.util.PermissionHelper;
 import org.pircbotx.hooks.ListenerAdapter;
@@ -15,7 +14,7 @@ public class HelpListener extends ListenerAdapter {
 
     private String m_command = ".help";
 
-    private List<MemberModel.MemberStatus> neededPermissions =
+    private List<MemberModel.MemberStatus> m_neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
@@ -27,7 +26,7 @@ public class HelpListener extends ListenerAdapter {
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
         if (event.getMessage().startsWith(m_command)) {
-            if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
+            if(PermissionHelper.HasPermissionFromList(m_neededPermissions, event.getUser().getNick())) {
                 
                 if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                     String help = CommandHelper.removeCommandFromString(event.getMessage()).trim();
@@ -50,11 +49,13 @@ public class HelpListener extends ListenerAdapter {
                         AdminCmdListener.sendHelpMsg(event);
                     } else if (help.equals("shame")) {
                         ShameListener.sendHelpMsg(event);
+                    } else if (help.equals("lastseen")) {
+                        LastSeenListener.sendHelpMsg(event);
                     } else {
                         event.respond("Help module not found");
                     }
                 } else {
-                    event.respond("Loaded modules are: admin, bouncer, helloworld, help, shame, time, twitter, version, website");
+                    event.respond("Loaded modules are: admin, bouncer, helloworld, help, shame, lastseen, time, twitter, version, website");
                     event.respond("Ex. .help <module>");
                 }
                 

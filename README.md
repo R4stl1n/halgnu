@@ -52,6 +52,20 @@ Shows a useful help menu.
 .help <module> - Shows module specific help message
 ```
 
+#### Shame
+Shame module.
+
+```
+.shame <user> - Shames a user
+```
+
+#### LastSeen
+LastSeen module.
+
+```
+.lastseen <user> - Shows when a user last said something
+```
+
 #### Time
 Time module.
 

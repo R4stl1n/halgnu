@@ -16,7 +16,7 @@ public class ShameListener extends ListenerAdapter {
 
     private String m_command = ".shame";
 
-    private List<MemberModel.MemberStatus> neededPermissions =
+    private List<MemberModel.MemberStatus> m_neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
@@ -38,7 +38,7 @@ public class ShameListener extends ListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
         if (event.getMessage().startsWith(m_command)) {
-            if (PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
+            if (PermissionHelper.HasPermissionFromList(m_neededPermissions, event.getUser().getNick())) {
 
                 if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                     int saying = randInt(0,m_shameSayings.length - 1);

@@ -17,12 +17,12 @@ public class AdminCmdListener extends ListenerAdapter {
     private String m_kickCommand = ".kick";
     private String m_topicCommand = ".topic";
 
-    private List<MemberModel.MemberStatus> neededKickPermissions =
+    private List<MemberModel.MemberStatus> m_neededKickPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.ADMIN
             ));
 
-    private List<MemberModel.MemberStatus> neededTopicPermissions =
+    private List<MemberModel.MemberStatus> m_neededTopicPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
                     MemberModel.MemberStatus.OG,
                     MemberModel.MemberStatus.ADMIN,
@@ -48,7 +48,7 @@ public class AdminCmdListener extends ListenerAdapter {
     }
     
     private void handleKickCommand(GenericMessageEvent event) {
-        if(PermissionHelper.HasPermissionFromList(neededKickPermissions, event.getUser().getNick())) {
+        if(PermissionHelper.HasPermissionFromList(m_neededKickPermissions, event.getUser().getNick())) {
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
                 if(!CommandHelper.removeCommandFromString(event.getMessage()).trim().equals(ConfigManager.getInstance().getIrcNick())) {
                     AdminCmdHelper.kickUserFromRoom(CommandHelper.removeCommandFromString(event.getMessage()), "Admin_Request");
@@ -62,7 +62,7 @@ public class AdminCmdListener extends ListenerAdapter {
     }
     
     private void handleTopicCommand(GenericMessageEvent event) {
-        if(PermissionHelper.HasPermissionFromList(neededTopicPermissions, event.getUser().getNick())) {
+        if(PermissionHelper.HasPermissionFromList(m_neededTopicPermissions, event.getUser().getNick())) {
             if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 0)) {
                 AdminCmdHelper.changeTopic(CommandHelper.removeCommandFromString(event.getMessage()));
             } else {
