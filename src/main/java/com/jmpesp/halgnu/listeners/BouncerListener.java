@@ -21,12 +21,12 @@ import java.util.List;
 public class BouncerListener extends ListenerAdapter {
 
     private String m_inviteCommand = ".invite";
-    private String m_whoInvitedCommand = ".whoInvited";
-    private String m_memberStatusCommand = ".memberStatus";
-    private String m_statusOfMember = ".statusOfMember";
+    private String m_whoInvitedCommand = ".whoinvited";
+    private String m_memberStatusCommand = ".memberstatus";
+    private String m_statusOfMember = ".statusofmember";
     private String m_enforceCommand = ".enforce";
-    private String m_changeStatusCommand = ".changeStatus";
-    private String m_removeMemberCommand = ".removeMember";
+    private String m_changeStatusCommand = ".changestatus";
+    private String m_removeMemberCommand = ".removemember";
     
     private List<MemberModel.MemberStatus> neededInvitePermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
