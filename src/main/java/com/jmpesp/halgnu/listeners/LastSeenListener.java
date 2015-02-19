@@ -43,6 +43,7 @@ public class LastSeenListener extends ListenerAdapter {
                         + ":<" + event.getUser().getNick()+"> " + event.getMessage());
             }
         }
+
         if (event.getMessage().startsWith(m_command)) {
             if (PermissionHelper.HasPermissionFromList(m_neededPermissions, event.getUser().getNick())) {
                 if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {

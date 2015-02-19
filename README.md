@@ -59,6 +59,13 @@ Shame module.
 .shame <user> - Shames a user
 ```
 
+#### Tell
+Tell module.
+
+```
+.tell <user> <msg> - Have bot relay a message to user when they become active
+```
+
 #### LastSeen
 LastSeen module.
 

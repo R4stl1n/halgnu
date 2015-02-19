@@ -28,6 +28,7 @@ public class IRCConnectionManager {
                 .addListener(new HelpListener())
                 .addListener(new TimeListener())
                 .addListener(new ShameListener())
+                .addListener(new TellListener())
                 .addListener(new BouncerListener())
                 .addListener(new VersionListener())
                 .addListener(new TwitterListener())
