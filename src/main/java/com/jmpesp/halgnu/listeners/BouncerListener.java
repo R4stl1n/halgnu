@@ -76,12 +76,12 @@ public class BouncerListener extends ListenerAdapter {
 
     public static void sendHelpMsg(GenericMessageEvent event) {
         event.getBot().sendIRC().message(event.getUser().getNick(), ".invite <user> - Used to invite user to room");
-        event.getBot().sendIRC().message(event.getUser().getNick(), ".whoInvited <user> - Returns who invited the user");
-        event.getBot().sendIRC().message(event.getUser().getNick(),".memberStatus - Returns your member status");
-        event.getBot().sendIRC().message(event.getUser().getNick(), ".statusOfMember <member> - Returns status of desired member");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".whoinvited <user> - Returns who invited the user");
+        event.getBot().sendIRC().message(event.getUser().getNick(),".memberitatus - Returns your member status");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".statusofmember <member> - Returns status of desired member");
         event.getBot().sendIRC().message(event.getUser().getNick(), ".enforce - Enables/Disables bouncer enforcement");
-        event.getBot().sendIRC().message(event.getUser().getNick(), ".changeStatus <user> <status> - Change users membership status");
-        event.getBot().sendIRC().message(event.getUser().getNick(), ".removeMember <user> - Removes user from the room");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".changestatus <user> <status> - Change users membership status");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".removemember <user> - Removes user from the room");
     }
     
     @Override

@@ -5,6 +5,7 @@ import com.jmpesp.halgnu.tasks.TwitterTask;
 import com.jmpesp.halgnu.util.CommandHelper;
 import com.jmpesp.halgnu.managers.ConfigManager;
 import com.jmpesp.halgnu.util.PermissionHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import twitter4j.*;
@@ -19,6 +20,8 @@ public class TwitterListener extends ListenerAdapter {
 
     private String m_command = ".tweet";
 
+    private int m_nickAbbrivLength = 7;
+    private int m_twitterMsgLimit = 140;
 
     private List<MemberModel.MemberStatus> neededPermissions =
             new ArrayList<MemberModel.MemberStatus>(Arrays.asList(
@@ -57,10 +60,17 @@ public class TwitterListener extends ListenerAdapter {
         if (event.getMessage().startsWith(m_command)) {
             if(PermissionHelper.HasPermissionFromList(neededPermissions, event.getUser().getNick())) {
                 if (CommandHelper.checkForAmountOfArgs(event.getMessage(), 1)) {
-                    if (tweetMessage(CommandHelper.removeCommandFromString(event.getMessage()))) {
-                        event.respond("Tweeted");
+                    String completeMsg = CommandHelper.removeCommandFromString(event.getMessage()).trim() +
+                            " - " + StringUtils.abbreviate(event.getUser().getNick().trim(), m_nickAbbrivLength);
+
+                    if(completeMsg.length() <= m_twitterMsgLimit) {
+                        if (tweetMessage(completeMsg)){
+                            event.respond("Tweeted");
+                        } else {
+                            event.respond("Error occurred when sending tweet.");
+                        }
                     } else {
-                        event.respond("Error occurred when sending tweet.");
+                        event.respond("Error: Tweet is " + (completeMsg.length()-m_twitterMsgLimit) + " characters to long.");
                     }
                 } else {
                     event.respond("Ex: " + m_command + "");
