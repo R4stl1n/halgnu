@@ -6,7 +6,6 @@ import com.jmpesp.halgnu.managers.IRCConnectionManager;
 import com.jmpesp.halgnu.models.ActivityModel;
 import com.jmpesp.halgnu.util.AdminCmdHelper;
 
-import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.util.*;
 

@@ -44,6 +44,8 @@ public class ActivityListener extends ListenerAdapter {
 
     public static void sendHelpMsg(GenericMessageEvent event) {
         event.getBot().sendIRC().message(event.getUser().getNick(), ".lastseen <user> - Shows when a user last said something");
+        event.getBot().sendIRC().message(event.getUser().getNick(), ".exempt <user> - Exempts a user from the inactivity check");
+
     }
 
     @Override
