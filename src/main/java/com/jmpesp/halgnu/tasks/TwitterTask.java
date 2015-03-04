@@ -8,7 +8,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.util.List;
 import java.util.TimerTask;
 
-public class TwitterTask extends TimerTask{
+public class TwitterTask extends TimerTask {
 
     private String pastTweet = "";
 

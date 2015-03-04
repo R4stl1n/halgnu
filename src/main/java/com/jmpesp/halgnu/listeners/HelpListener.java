@@ -49,15 +49,15 @@ public class HelpListener extends ListenerAdapter {
                         AdminCmdListener.sendHelpMsg(event);
                     } else if (help.equals("shame")) {
                         ShameListener.sendHelpMsg(event);
-                    } else if (help.equals("lastseen")) {
-                        LastSeenListener.sendHelpMsg(event);
+                    } else if (help.equals("activity")) {
+                        ActivityListener.sendHelpMsg(event);
                     } else if (help.equals("tell")) {
                         TellListener.sendHelpMsg(event);
                     } else {
                         event.respond("Help module not found");
                     }
                 } else {
-                    event.respond("Loaded modules are: admin, bouncer, helloworld, help, shame, lastseen, tell, time, twitter, version, website");
+                    event.respond("Loaded modules are: activity, admin, bouncer, helloworld, help, shame, tell, time, twitter, version, website");
                     event.respond("Ex. .help <module>");
                 }
                 

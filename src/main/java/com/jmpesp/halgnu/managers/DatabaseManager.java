@@ -10,9 +10,12 @@ import java.util.Date;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.table.TableUtils;
+import com.jmpesp.halgnu.models.ActivityModel;
 import com.jmpesp.halgnu.models.MemberModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.xml.crypto.Data;
 
 public class DatabaseManager {
     private final Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
@@ -21,6 +24,7 @@ public class DatabaseManager {
     private static ConnectionSource m_connectionSource;
     
     private static Dao<MemberModel, String> m_memberDao;
+    private static Dao<ActivityModel, String> m_activityDao;
 
     protected DatabaseManager() {
         String databaseUrl = "jdbc:sqlite:halgnu.db";
@@ -30,9 +34,13 @@ public class DatabaseManager {
             
             // Create daos
             m_memberDao = DaoManager.createDao(m_connectionSource, MemberModel.class);
-            
+            m_activityDao = DaoManager.createDao(m_connectionSource, ActivityModel.class);
+
+            TableUtils.createTableIfNotExists(m_connectionSource, MemberModel.class);
+            TableUtils.createTableIfNotExists(m_connectionSource, ActivityModel.class);
+
             // Check if tables need to be created
-            CheckDatabaseExists();
+            CheckIfAdminExists();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,7 +51,94 @@ public class DatabaseManager {
     public Dao<MemberModel, String> getMemberDao() {
         return m_memberDao;
     }
-    
+    public Dao<ActivityModel, String> getActivityDao() { return m_activityDao; }
+
+    public boolean createActivity(String username, String msg) {
+        try {
+            if(getActivityByUsername(username) == null) {
+                Date date = new Date();
+                ActivityModel activityModel = new ActivityModel();
+                activityModel.setUsername(username);
+                activityModel.setLastMessage(msg);
+                activityModel.setLastActive(date.toString());
+
+                try {
+                    m_activityDao.create(activityModel);
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
+
+    public boolean getActivityExempt(String username) {
+        try {
+            ActivityModel activityModel = getActivityByUsername(username);
+            if(activityModel != null) {
+                return activityModel.getExempt();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
+
+    public boolean toggleActivityExempt(String username) {
+        try {
+            ActivityModel activityModel = getActivityByUsername(username);
+            if(activityModel != null) {
+
+                activityModel.setExempt(!activityModel.getExempt());
+
+                try {
+                    m_activityDao.update(activityModel);
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
+
+    public boolean updateActivity(String username, String msg) {
+        try {
+            ActivityModel activityModel = getActivityByUsername(username);
+            if(activityModel != null) {
+                Date date = new Date();
+                activityModel.setLastMessage(msg);
+                activityModel.setLastActive(date.toString());
+
+                try {
+                    m_activityDao.update(activityModel);
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
+
     public boolean createMember(String username, String invitedBy) {
         try {
             if(getMemberByUsername(username) == null) {
@@ -97,7 +192,19 @@ public class DatabaseManager {
             return false;
         }
     }
-    
+
+    public boolean removeMemberByUsername(String username) throws SQLException {
+        MemberModel memberModel = m_memberDao.queryForId(username);
+
+        if(memberModel != null) {
+            m_memberDao.delete(memberModel);
+
+            return true;
+        }
+
+        return false;
+    }
+
     public MemberModel getMemberByUsername(String username) throws SQLException {
         MemberModel memberModel;
 
@@ -105,22 +212,27 @@ public class DatabaseManager {
 
         return memberModel;
     }
+
+    public ActivityModel getActivityByUsername(String username) throws SQLException {
+        ActivityModel activityModel;
+
+        activityModel = m_activityDao.queryForId(username);
+
+        return activityModel;
+    }
     
-    private void CheckDatabaseExists() throws SQLException {
-        File configFile = new File("halgnu.db");
+    private void CheckIfAdminExists() throws SQLException {
 
-        if(!configFile.exists()) {
-            logger.info("Database not found creating new one");
-            TableUtils.createTable(m_connectionSource, MemberModel.class);
-
-            logger.info("Added owner to database");
-
+        if(getMemberByUsername(ConfigManager.getInstance().getIrcOwner()) == null) {
+            logger.info("Admin user not found");
             // Create owner in table
             createMember(ConfigManager.getInstance().getIrcOwner(),
                     ConfigManager.getInstance().getIrcNick(), MemberModel.MemberStatus.ADMIN);
+            logger.info("Admin user added");
+
         }
 
-        logger.info("Database found");
+        logger.info("Admin user found");
     }
     
     public static DatabaseManager getInstance() {

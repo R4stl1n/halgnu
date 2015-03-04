@@ -32,7 +32,7 @@ public class IRCConnectionManager {
                 .addListener(new BouncerListener())
                 .addListener(new VersionListener())
                 .addListener(new TwitterListener())
-                .addListener(new LastSeenListener())
+                .addListener(new ActivityListener())
                 .addListener(new AdminCmdListener())
                 .addListener(new HelloWorldListener())
                 .addListener(new GoogleSearchListener())
