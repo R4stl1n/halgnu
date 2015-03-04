@@ -25,30 +25,30 @@ public class InactivityTask extends TimerTask {
                 c.add(Calendar.DATE, 14);
                 Date inactiveDate =c.getTime();
 
+                if(!model.getExempt()) {
+                    if (new Date().after(inactiveDate)) {
 
-                if(new Date().after(inactiveDate)) {
+                        if (DatabaseManager.getInstance().removeMemberByUsername(model.getUsername())) {
 
-                    if(DatabaseManager.getInstance().removeMemberByUsername(model.getUsername())) {
+                            AdminCmdHelper.kickUserFromRoom(model.getUsername(), "Revoked_For_Inactivity");
 
-                        AdminCmdHelper.kickUserFromRoom(model.getUsername(), "Revoked_For_Inactivity");
+                            // Notify the channel
+                            String completeMessage = "Member: <" + model.getUsername() + ">" + " removed for inactivity";
 
-                        // Notify the channel
-                        String completeMessage = "Member: <" + model.getUsername() + ">" + " removed for inactivity";
+                            IRCConnectionManager.getInstance().getBotConnection().sendIRC()
+                                    .message(ConfigManager.getInstance().getIrcChannel(), completeMessage);
 
-                        IRCConnectionManager.getInstance().getBotConnection().sendIRC()
-                                .message(ConfigManager.getInstance().getIrcChannel(), completeMessage);
+                        } else {
+                            // Notify channel something went wrong
+                            // Notify the channel
+                            String completeMessage = "Error while removing member <"
+                                    + model.getUsername() + ">" + "for inactivity";
 
-                    } else {
-                        // Notify channel something went wrong
-                        // Notify the channel
-                        String completeMessage = "Error while removing member <"
-                                + model.getUsername() +">" + "for inactivity";
-
-                        IRCConnectionManager.getInstance().getBotConnection().sendIRC()
-                                .message(ConfigManager.getInstance().getIrcChannel(), completeMessage);
+                            IRCConnectionManager.getInstance().getBotConnection().sendIRC()
+                                    .message(ConfigManager.getInstance().getIrcChannel(), completeMessage);
+                        }
                     }
                 }
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
