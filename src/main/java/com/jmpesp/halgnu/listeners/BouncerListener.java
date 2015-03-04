@@ -97,6 +97,8 @@ public class BouncerListener extends ListenerAdapter {
                 } else {
                     AdminCmdHelper.kickUserFromRoom(join.getUser().getNick(), "Not-Authorized");
                 }
+
+                doEnforcmentCheck(join);
             }
         }
     }
@@ -235,25 +237,7 @@ public class BouncerListener extends ListenerAdapter {
                     event.respond("Activating enforcement mode");
 
                     event.respond("Scanning room");
-
-                    for (User user : event.getBot().getUserBot().getChannels().first().getUsers()) {
-                        if(!(user.getNick().trim().equals(ConfigManager.getInstance().getIrcNick())))
-                        try {
-                            MemberModel member = DatabaseManager.getInstance().getMemberByUsername(user.getNick().trim());
-                            if (member == null) {
-                                AdminCmdHelper.kickUserFromRoom(user.getNick(), "Not-Authorized");
-                                numKicked += 1;
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if(numKicked == 1) {
-                        event.respond("Removed " + numKicked + " user");
-                    } else {
-                        event.respond("Removed " + numKicked + " users");
-                    }
-
+                    doEnforcmentCheck(event);
                     event.respond("Scan complete");
 
                 } else {
@@ -262,6 +246,48 @@ public class BouncerListener extends ListenerAdapter {
             }
         } else {
             event.respond("Permission denied");
+        }
+    }
+
+    private void doEnforcmentCheck(GenericMessageEvent event) {
+        int numKicked = 0;
+
+        for (User user : event.getBot().getUserBot().getChannels().first().getUsers()) {
+            if(!(user.getNick().trim().equals(ConfigManager.getInstance().getIrcNick()))) {
+                try {
+                    MemberModel member = DatabaseManager.getInstance().getMemberByUsername(user.getNick().trim());
+                    if (member == null) {
+                        AdminCmdHelper.kickUserFromRoom(user.getNick(), "Not-Authorized");
+                        numKicked += 1;
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if(numKicked == 1) {
+            event.respond("Removed " + numKicked + " user");
+        } else {
+            event.respond("Removed " + numKicked + " users");
+        }
+    }
+
+    private void doEnforcmentCheck(JoinEvent event) {
+        int numKicked = 0;
+
+        for (User user : event.getBot().getUserBot().getChannels().first().getUsers()) {
+            if(!(user.getNick().trim().equals(ConfigManager.getInstance().getIrcNick()))) {
+                try {
+                    MemberModel member = DatabaseManager.getInstance().getMemberByUsername(user.getNick().trim());
+                    if (member == null) {
+                        AdminCmdHelper.kickUserFromRoom(user.getNick(), "Not-Authorized");
+                        numKicked += 1;
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
