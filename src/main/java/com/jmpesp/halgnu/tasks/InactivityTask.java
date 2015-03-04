@@ -39,7 +39,6 @@ public class InactivityTask extends TimerTask {
 
                         } else {
                             // Notify channel something went wrong
-                            // Notify the channel
                             String completeMessage = "Error while removing member <"
                                     + model.getUsername() + ">" + "for inactivity";
 
