@@ -115,6 +115,27 @@ public class DatabaseManager {
         return false;
     }
 
+    public boolean deleteActivity(String username) {
+        try {
+            ActivityModel activityModel = getActivityByUsername(username);
+            if(activityModel != null) {
+
+                try {
+                    m_activityDao.delete(activityModel);
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
+
     public boolean updateActivity(String username, String msg) {
         try {
             ActivityModel activityModel = getActivityByUsername(username);

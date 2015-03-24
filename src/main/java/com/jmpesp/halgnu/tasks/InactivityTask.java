@@ -16,27 +16,35 @@ public class InactivityTask extends TimerTask {
         try {
 
             List<ActivityModel> models = DatabaseManager.getInstance().getActivityDao().queryForAll();
-            for(ActivityModel model: models) {
+            for (ActivityModel model : models) {
 
                 Date modelDate = new Date(model.getLastActive());
                 Calendar c = new GregorianCalendar();
                 c.setTime(modelDate);
                 c.add(Calendar.DATE, 14);
-                Date inactiveDate =c.getTime();
+                Date inactiveDate = c.getTime();
 
-                if(!model.getExempt()) {
+                if (!model.getExempt()) {
                     if (new Date().after(inactiveDate)) {
 
-                        if (DatabaseManager.getInstance().removeMemberByUsername(model.getUsername())) {
+                        if (DatabaseManager.getInstance().deleteActivity(model.getUsername())) {
+                            if (DatabaseManager.getInstance().removeMemberByUsername(model.getUsername())) {
 
-                            AdminCmdHelper.kickUserFromRoom(model.getUsername(), "Revoked_For_Inactivity");
+                                AdminCmdHelper.kickUserFromRoom(model.getUsername(), "Revoked_For_Inactivity");
 
-                            // Notify the channel
-                            String completeMessage = "Member: <" + model.getUsername() + ">" + " removed for inactivity";
+                                // Notify the channel
+                                String completeMessage = "Member: <" + model.getUsername() + ">" + " removed for inactivity";
 
-                            IRCConnectionManager.getInstance().getBotConnection().sendIRC()
-                                    .message(ConfigManager.getInstance().getIrcChannel(), completeMessage);
+                                IRCConnectionManager.getInstance().getBotConnection().sendIRC()
+                                        .message(ConfigManager.getInstance().getIrcChannel(), completeMessage);
+                            } else {
+                                // Notify channel something went wrong
+                                String completeMessage = "Error while removing member <"
+                                        + model.getUsername() + ">" + "for inactivity";
 
+                                IRCConnectionManager.getInstance().getBotConnection().sendIRC()
+                                        .message(ConfigManager.getInstance().getIrcChannel(), completeMessage);
+                            }
                         } else {
                             // Notify channel something went wrong
                             String completeMessage = "Error while removing member <"
