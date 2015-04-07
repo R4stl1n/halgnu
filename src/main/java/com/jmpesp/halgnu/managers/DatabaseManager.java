@@ -226,6 +226,26 @@ public class DatabaseManager {
         return false;
     }
 
+    public MemberModel setTwitterHandleByUsername(String username, String handle) {
+        try {
+            MemberModel memberModel = getMemberByUsername(username);
+            if(memberModel != null) {
+
+                memberModel.setTwitterHandle(handle);
+
+                try {
+                    m_memberDao.update(memberModel);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public MemberModel getMemberByUsername(String username) throws SQLException {
         MemberModel memberModel;
 

@@ -26,6 +26,9 @@ public class MemberModel {
     @DatabaseField(dataType = DataType.ENUM_INTEGER)
     MemberStatus m_memberStatus;
 
+    @DatabaseField
+    private String m_twitterHandle;
+
     public MemberModel() {
         // ORMLite needs a no-arg constructor
     }
@@ -60,5 +63,13 @@ public class MemberModel {
     
     public void setMemberStatus(MemberStatus memberStatus) {
         this.m_memberStatus = memberStatus;
+    }
+
+    public String getTwitterHandle() {
+        return m_twitterHandle;
+    }
+    
+    public void setTwitterHandle(String m_twitterHandle) {
+        this.m_twitterHandle = m_twitterHandle;
     }
 }

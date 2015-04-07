@@ -41,6 +41,8 @@ public class HelpListener extends ListenerAdapter {
                         TimeListener.sendHelpMsg(event);
                     } else if (help.equals("twitter")) {
                         TwitterListener.sendHelpMsg(event);
+                    } else if (help.equals("twitterhandle")) {
+                        TwitterHandleListener.sendHelpMsg(event);
                     } else if (help.equals("version")) {
                         VersionListener.sendHelpMsg(event);
                     } else if (help.equals("website")) {
@@ -57,7 +59,7 @@ public class HelpListener extends ListenerAdapter {
                         event.respond("Help module not found");
                     }
                 } else {
-                    event.respond("Loaded modules are: activity, admin, bouncer, helloworld, help, shame, tell, time, twitter, version, website");
+                    event.respond("Loaded modules are: activity, admin, bouncer, helloworld, help, shame, tell, time, twitter, twitterhandle, version, website");
                     event.respond("Ex. .help <module>");
                 }
                 

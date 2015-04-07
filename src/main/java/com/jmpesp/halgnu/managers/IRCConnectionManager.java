@@ -37,6 +37,7 @@ public class IRCConnectionManager {
                 .addListener(new HelloWorldListener())
                 .addListener(new GoogleSearchListener())
                 .addListener(new WebsiteHeaderListener())
+                .addListener(new TwitterHandleListener())
                 .addAutoJoinChannel(ConfigManager.getInstance().getIrcChannel())
                 .buildConfiguration();
 
