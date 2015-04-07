@@ -24,14 +24,14 @@ public class ShameListener extends ListenerAdapter {
                     MemberModel.MemberStatus.PROSPECT
             ));
 
-    private String[] m_shameSayings = new String[]{"You should be ashamed of your self and your family, %XXXX%",
-            "You're an awful human being and deserve aids, %XXXX%",
+    private String[] m_shameSayings = new String[]{"You should be ashamed of yourself and your family, %XXXX%",
+            "You're an awful human being and deserve AIDS, %XXXX%",
             "Jesus Christ, %XXXX%. I didn't know anyone could be that dumb.",
             "Go kill yourself, %XXXX%",
             "You are a sad, sorry little man and you have my pity, %XXXX%",
             "You look like something I'd draw with my left hand, %XXXX%",
             "You'll never be the man your mother is %XXXX%",
-            "Holy shit, you are totally harmless! You should be ashame %XXXX%",
+            "Holy shit, you are totally harmless! You should be ashamed %XXXX%",
             "If I wanted to hear what you had to say, I'd record myself taking a shit %XXXX%",
             "You are the personification of Comic Sans %XXXX%",
             "You sure talk a lot, but never really say anything %XXXX%",
