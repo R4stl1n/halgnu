@@ -1,17 +1,12 @@
 package com.jmpesp.halgnu.listeners;
 
 import com.jmpesp.halgnu.managers.DatabaseManager;
-import com.jmpesp.halgnu.models.ActivityModel;
 import com.jmpesp.halgnu.models.MemberModel;
-import com.jmpesp.halgnu.tasks.InactivityTask;
 import com.jmpesp.halgnu.util.CommandHelper;
-import com.jmpesp.halgnu.util.PermissionHelper;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 // Twitter Handle HalGNU extension by @tprime_
 public class TwitterHandleListener extends ListenerAdapter {
